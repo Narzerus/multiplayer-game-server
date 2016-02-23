@@ -1,0 +1,22 @@
+{
+  "name": "multiplayer-game-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Narzerus/multiplayer-game-server.git"
+  },
+  "author": "Rafael Vidaurre",
+  "bugs": {
+    "url": "https://github.com/Narzerus/multiplayer-game-server/issues"
+  },
+  "homepage": "https://github.com/Narzerus/multiplayer-game-server#readme",
+  "dependencies": {
+    "rethinkdbdash": "^2.2.18"
+  }
+}
