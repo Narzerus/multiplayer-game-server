@@ -1,7 +1,6 @@
 'use strict';
 
 let server = require('../server.js');
-let userRoutes = require('./users-routes');
+let userRouter = require('./user-router');
 
-
-server.get('/users/new', userRoutes.new);
+server.use('/users', userRouter);
