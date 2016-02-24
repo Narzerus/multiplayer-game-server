@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/Narzerus/multiplayer-game-server#readme",
   "dependencies": {
-    "rethinkdbdash": "^2.2.18"
+    "bcrypt": "^0.8.5",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.4"
   }
 }
