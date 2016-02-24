@@ -65,13 +65,47 @@ userSchema.pre('save', function (next) {
 */
 
 /* Compare password with hash */
-userSchema.methods.comparePassword = function (password, cb) {
-  bcrypt.compare(password, this.password, function (err, isMatch) {
-    if (err) { return cb(err); }
+userSchema.methods.comparePassword = function (password) {
+  let deferred;
 
-    cb(null, isMatch);
+  return new Promise(function (resolve, reject) {
+    bcrypt.compare(password, this.password, function (err, isMatch) {
+      if (err) { throw err; }
+
+      resolve(isMatch);
+    });
   });
 };
+
+userSchema.statics.getAuthenticated = function (email, password) {
+  const REASONS = {
+    WRONG_PASSWORD: 'WRONG_PASSWORD',
+    WRONG_EMAIL: 'WRONG_EMAIL'
+  };
+
+  this
+    .findOne({email: email})
+    .then(function (user) {
+      if (!user) {
+        resolve(null);
+        return Promise.reject(null, WRONG_EMAIL);
+      }
+
+      return user.comparePassword(password)
+    })
+    .then(function (isMatch) {
+      if (!isMatch) {
+        return Promise.reject(null, WRONG_PASSWORD);
+      }
+
+      return user;
+    })
+    .catch(function (err, reason) {
+      if (err) { throw err };
+
+      return Promise.resolve(reason);
+    });
+}
 
 
 module.exports = mongoose.model('User', userSchema);
