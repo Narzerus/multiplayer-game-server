@@ -2,7 +2,7 @@
 
 let express = require('express');
 
-
+let User = require('../models/user');
 let userRouter = express.Router();
 
 userRouter.get('/', function (req, res) {
@@ -10,7 +10,10 @@ userRouter.get('/', function (req, res) {
 });
 
 userRouter.post('/', function (req, res) {
-  res.send('User create test!');
+  let user;
+
+  console.log(req.body);
+  res(req.body);
 });
 
 
