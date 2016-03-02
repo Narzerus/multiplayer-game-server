@@ -6,9 +6,9 @@ let bcrypt = require('bcrypt');
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
-/******
+/**
 * Schema
-*******/
+**/
 let userSchema = new Schema({
   email: {
     type: String,
@@ -25,9 +25,9 @@ let userSchema = new Schema({
   updated_at: Date
 });
 
-/******
+/**
 * Middleware
-*******/
+**/
 
 /* Set timestamps */
 userSchema.pre('save', function (next) {
@@ -62,7 +62,7 @@ userSchema.pre('save', function (next) {
 
 /**
 * Methods
-*/
+**/
 
 /* Compare password with hash */
 userSchema.methods.comparePassword = function (password) {
