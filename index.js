@@ -5,10 +5,11 @@ require('dotenv').config();
 let db = require('./db');
 let app = require('./app');
 
+app.server.listen(proncess.env.PORT);
+
 db
   .then(function () {
     console.log('Successfully connected to MongoDB');
-    app.server.listen(3000);
   })
   .then(function () {
     console.log('Webserver listening...');
