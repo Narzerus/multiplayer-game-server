@@ -63,16 +63,14 @@ userSchema.pre('save', function (next) {
 /* Returns a user if credentials are valid */
 userSchema.statics.getAuthenticated = function (email, password) {
   const REASONS = {
-    WRONG_PASSWORD: 'WRONG_PASSWORD',
-    WRONG_EMAIL: 'WRONG_EMAIL'
+    WRONG_CREDENTIALS: 'WRONG_CREDENTIALS'
   };
 
   return this
     .findOne({email: email})
     .then(function (user) {
       if (!user) {
-        resolve(null);
-        return Promise.reject(null, WRONG_EMAIL);
+        return Promise.reject({reason: REASONS.WRONG_CREDENTIALS});
       }
 
       return user.comparePassword(password).then(function (isMatch) {
@@ -80,13 +78,13 @@ userSchema.statics.getAuthenticated = function (email, password) {
           return Promise.resolve(user);
         }
 
-        return Promise.reject(null, REASONS.WRONG_PASSWORD)
+        return Promise.reject({reason: REASONS.WRONG_CREDENTIALS});
       });
     })
-    .catch(function (err, reason) {
-      if (err) { throw err };
+    .catch(function (response) {
+      if (response.err) { throw response.err };
 
-      return Promise.resolve(reason);
+      return Promise.reject(response);
     });
 }
 /* Compare password with hash */

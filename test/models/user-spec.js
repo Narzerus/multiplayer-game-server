@@ -33,14 +33,22 @@ describe('User', function () {
     });
 
     it('resolves with the user if credentials are correct', function () {
-      return User.find({email: 'foo@bar.com'}).then(function (result) {
-        let user = _.first(result);
+      return User.findOne({email: 'foo@bar.com'}).then(function (user) {
         return User.getAuthenticated('foo@bar.com', 'right-password').then(function (result) {
           expect(user._id).to.eql(result._id);
         }).catch(function (err) {
           if (err) { throw err; }
         });
       })
+    });
+
+    it('rejects with the reason if credentials are incorrect', function (done) {
+      return User.getAuthenticated('foo@bar.com', 'wrong-password')
+        .catch(function (result) {
+          expect(result.reason).to.eql('WRONG_CREDENTIALS');
+          expect(result.err).to.be.an('undefined');
+          done();
+        });
     });
   });
 
