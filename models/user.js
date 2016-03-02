@@ -28,7 +28,6 @@ let userSchema = new Schema({
 /**
 * Middleware
 **/
-
 /* Set timestamps */
 userSchema.pre('save', function (next) {
   let currentDate;
@@ -42,7 +41,6 @@ userSchema.pre('save', function (next) {
 
   next();
 });
-
 /* Hash paswords */
 userSchema.pre('save', function (next) {
   if (!this.isModified('password')) { return next(); }
@@ -63,7 +61,6 @@ userSchema.pre('save', function (next) {
 /**
 * Methods
 **/
-
 /* Compare password with hash */
 userSchema.methods.comparePassword = function (password) {
   let deferred;
@@ -76,7 +73,7 @@ userSchema.methods.comparePassword = function (password) {
     });
   });
 };
-
+/* Returns a user if credentials are valid */
 userSchema.statics.getAuthenticated = function (email, password) {
   const REASONS = {
     WRONG_PASSWORD: 'WRONG_PASSWORD',
