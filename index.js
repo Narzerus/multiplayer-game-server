@@ -1,15 +1,11 @@
 'use strict';
 
-let mongoose = require('mongoose');
+require('dotenv').config();
 
+let db = require('./db');
 let app = require('./app');
 
-let connStr = 'mongodb://localhost:27017/multiplayer-game';
-
-mongoose
-  .connect(connStr, function (err) {
-    if (err) { throw err };
-  })
+db
   .then(function () {
     console.log('Successfully connected to MongoDB');
     app.server.listen(3000);
