@@ -75,14 +75,13 @@ userSchema.statics.getAuthenticated = function (email, password) {
         return Promise.reject(null, WRONG_EMAIL);
       }
 
-      return user.comparePassword(password, user);
-    })
-    .then(function (isMatch, user) {
-      if (!isMatch) {
-        return Promise.reject(null, WRONG_PASSWORD);
-      }
+      return user.comparePassword(password).then(function (isMatch) {
+        if (isMatch) {
+          return Promise.resolve(user);
+        }
 
-      return user;
+        return Promise.reject(null, REASONS.WRONG_PASSWORD)
+      });
     })
     .catch(function (err, reason) {
       if (err) { throw err };

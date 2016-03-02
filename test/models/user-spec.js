@@ -2,6 +2,7 @@
 
 require('../spec-helper');
 
+let _ = require('lodash')
 let db = require('../../db');
 let chai = require('chai');
 let chaiAsPromised = require('chai-as-promised');
@@ -30,8 +31,19 @@ describe('User', function () {
     it('returns a promise', function () {
       expect(User.getAuthenticated('foo@bar.com', 'right-password').then).to.be.a('function');
     });
+
+    it('resolves with the user if credentials are correct', function () {
+      return User.find({email: 'foo@bar.com'}).then(function (result) {
+        let user = _.first(result);
+        return User.getAuthenticated('foo@bar.com', 'right-password').then(function (result) {
+          expect(user._id).to.eql(result._id);
+        }).catch(function (err) {
+          if (err) { throw err; }
+        });
+      })
+    });
   });
-  
+
   describe('#comparePassword', function () {
     it('returns a promise', function () {
       expect(user.comparePassword('right-password').then).to.be.a('function');
