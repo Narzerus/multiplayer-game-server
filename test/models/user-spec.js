@@ -2,7 +2,7 @@
 
 require('../spec-helper');
 
-let _ = require('lodash')
+let _ = require('lodash');
 let db = require('../../db');
 let chai = require('chai');
 let chaiAsPromised = require('chai-as-promised');

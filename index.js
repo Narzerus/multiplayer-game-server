@@ -5,7 +5,7 @@ require('dotenv').config();
 let db = require('./db');
 let app = require('./app');
 
-app.server.listen(proncess.env.PORT);
+app.server.listen(process.env.SERVER_PORT);
 
 db
   .then(function () {
