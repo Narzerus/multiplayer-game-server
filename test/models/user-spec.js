@@ -43,6 +43,15 @@ describe('User', function () {
         done();
       });
     });
+
+    it('saves password as encrypted hash', function (done) {
+      let password = 'new-password';
+      user.password = password
+      user.save().then(function () {
+        expect(user.password).not.to.eql(password);
+        done();
+      });
+    })
   });
 
   describe('.getAuthenticated', function () {
