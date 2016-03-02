@@ -27,6 +27,24 @@ beforeEach(function (done) {
 });
 
 describe('User', function () {
+  describe('middleware', function () {
+    it('sets timestamps on save', function (done) {
+      expect(user.created_at).to.be.a('date');
+      expect(user.updated_at).to.be.a('date');
+      done();
+    });
+
+    it('sets created_at on update', function (done) {
+      let prevDate = user.updated_at;
+      expect(user.updated_at).to.eql(user.created_at);
+      user.password = 'new-password';
+      user.save().then(function () {
+        expect(user.updated_at).not.to.eql(prevDate);
+        done();
+      });
+    });
+  });
+
   describe('.getAuthenticated', function () {
     it('returns a promise', function () {
       expect(User.getAuthenticated('foo@bar.com', 'right-password').then).to.be.a('function');
