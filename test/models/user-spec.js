@@ -26,16 +26,22 @@ beforeEach(function (done) {
 });
 
 describe('User', function () {
+  describe('.getAuthenticated', function () {
+    it('returns a promise', function () {
+      expect(User.getAuthenticated('foo@bar.com', 'right-password').then).to.be.a('function');
+    });
+  });
+  
   describe('#comparePassword', function () {
-    it('Should return a promise', function () {
+    it('returns a promise', function () {
       expect(user.comparePassword('right-password').then).to.be.a('function');
     });
 
-    it('Should resolve with True if password matches', function () {
+    it('resolves with True if password matches', function () {
       return expect(user.comparePassword('right-password')).eventually.equal(true);
     });
 
-    it('Should resolve with False if password doesn\'t match', function () {
+    it('resolves with False if password doesn\'t match', function () {
       return expect(user.comparePassword('wrong-password')).eventually.equal(false);
     });
   });

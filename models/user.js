@@ -57,22 +57,9 @@ userSchema.pre('save', function (next) {
   });
 });
 
-
 /**
 * Methods
 **/
-/* Compare password with hash */
-userSchema.methods.comparePassword = function (password) {
-  let deferred;
-
-  return new Promise((resolve, reject) => {
-    bcrypt.compare(password, this.password, function (err, isMatch) {
-      if (err) { throw err; }
-
-      resolve(isMatch);
-    });
-  });
-};
 /* Returns a user if credentials are valid */
 userSchema.statics.getAuthenticated = function (email, password) {
   const REASONS = {
@@ -80,7 +67,7 @@ userSchema.statics.getAuthenticated = function (email, password) {
     WRONG_EMAIL: 'WRONG_EMAIL'
   };
 
-  this
+  return this
     .findOne({email: email})
     .then(function (user) {
       if (!user) {
@@ -88,9 +75,9 @@ userSchema.statics.getAuthenticated = function (email, password) {
         return Promise.reject(null, WRONG_EMAIL);
       }
 
-      return user.comparePassword(password)
+      return user.comparePassword(password, user);
     })
-    .then(function (isMatch) {
+    .then(function (isMatch, user) {
       if (!isMatch) {
         return Promise.reject(null, WRONG_PASSWORD);
       }
@@ -103,6 +90,18 @@ userSchema.statics.getAuthenticated = function (email, password) {
       return Promise.resolve(reason);
     });
 }
+/* Compare password with hash */
+userSchema.methods.comparePassword = function (password) {
+  let deferred;
+
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, this.password, function (err, isMatch) {
+      if (err) { throw err; }
+
+      resolve(isMatch);
+    });
+  });
+};
 
 
 module.exports = mongoose.model('User', userSchema);
