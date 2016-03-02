@@ -4,7 +4,7 @@ let express = require('express');
 let bodyParser = require('body-parser');
 
 let server = require('../server.js');
-let userRouter = require('./user-router');
+let usersController = require('./controllers/users-controller');
 
-server.use('/users', userRouter);
+server.use('/users', usersController);
 server.use(bodyParser.json());
