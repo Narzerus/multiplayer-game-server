@@ -1,30 +1,60 @@
 'use strict';
 
 require('../spec-helper.js');
-require('../../index.js');
 
+let app = require('../../index.js');
 let _ = require('lodash');
 let fetch = require('node-fetch');
+let request = require('supertest');
 let chai = require('chai');
 let chaiAsPromised = require('chai-as-promised');
 let expect = chai.expect;
 
-const BASE_URL = `http://${process.env.SERVER_HOSTNAME}:${process.env.SERVER_PORT}`;
+const BASE_URL = `${process.env.SERVER_HOSTNAME}:${process.env.SERVER_PORT}`;
 
 describe('/users', function () {
   describe('POST /', function () {
-    it('responds with status 201 if data is valid', function (done) {
-      fetch(`${BASE_URL}/users`, {method: 'POST', body: {}}).then(function (res) {
-        console.log(res.status);
-        expect(res.status).to.eql(201);
-        done();
-      })
-      .catch(function (err) {
-        throw err;
+    describe('VALID PARAMS', function () {
+      it('responds with status 201', function (done) {
+        request(app)
+          .post('/users')
+          .send({
+            user: {
+              email: 'narzerus@gmail.com',
+              password: '1234'
+            }
+          })
+          .expect(201, done);
       });
     });
 
-    it('responds with status 422 if data is invalid', function (done) {
+    describe('INVALID PARAMS', function () {
+      let req;
+
+      beforeEach(function () {
+        req = request(app)
+          .post('/users')
+          .send({
+            user: {
+              email: '',
+              password: '1234'
+            }
+          })
+      });
+
+      it('responds with status 422', function (done) {
+        req.expect(422, done);
+      });
+
+      it('should return error', function (done) {
+        req
+          .expect(function (res) {
+            expect(res.body.errors).to.be.an('object');
+            console.log(res.body.errors)
+            expect(res.body.errors).to.have.property('email');
+          })
+          .end(done);
+      });
 
     });
   });

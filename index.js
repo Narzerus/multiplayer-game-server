@@ -12,8 +12,11 @@ db
     console.log('Successfully connected to MongoDB');
   })
   .then(function () {
-    console.log('Webserver listening...');
+    console.log(`Webserver listening... on port ${process.env.SERVER_PORT}`);
   })
   .catch(function (err) {
     if (err) { throw err; }
   });
+
+
+module.exports = app.server;;
