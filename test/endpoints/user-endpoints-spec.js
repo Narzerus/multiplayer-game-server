@@ -24,7 +24,7 @@ describe('/users', function () {
       });
     });
 
-    it('respondes with status 422 if data is invalid', function (done) {
+    it('responds with status 422 if data is invalid', function (done) {
 
     });
   });

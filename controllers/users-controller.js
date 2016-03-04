@@ -8,7 +8,9 @@ let userRouter = express.Router();
 userRouter.post('/', function (req, res) {
   let user;
 
-  // TODO: SOMETHING'S WRONG HERE
+  user = new User(req.params.user);
+
+  res.sendStatus(201);
 });
 
 
