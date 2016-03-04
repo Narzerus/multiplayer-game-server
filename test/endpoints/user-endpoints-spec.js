@@ -2,29 +2,52 @@
 
 require('../spec-helper.js');
 
-let app = require('../../index.js');
 let _ = require('lodash');
 let fetch = require('node-fetch');
 let request = require('supertest');
 let chai = require('chai');
 let chaiAsPromised = require('chai-as-promised');
 let expect = chai.expect;
+let app = require('../../index');
+let db = require('../../db');
+let User = require('../../models/user');
 
 const BASE_URL = `${process.env.SERVER_HOSTNAME}:${process.env.SERVER_PORT}`;
 
 describe('/users', function () {
   describe('POST /', function () {
     describe('VALID PARAMS', function () {
-      it('responds with status 201', function (done) {
-        request(app)
+      let req;
+
+      beforeEach(function () {
+        req = request(app)
           .post('/users')
           .send({
             user: {
-              email: 'narzerus@gmail.com',
+              email: 'foo@bar.com',
               password: '1234'
             }
-          })
-          .expect(201, done);
+          });
+      });
+
+      it('responds with status 201', function (done) {
+        req.expect(201, done);
+      });
+
+      it('creates a new user', function (done) {
+        req.end(function () {
+          User
+            .findOne({email: 'foo@bar.com'})
+            .then(function (user) {
+              expect(user).to.be.an('object');
+              expect(user._id).to.be.ok;
+              expect(user.email).to.eql('foo@bar.com');
+              done();
+            })
+            .catch(function (err) {
+              done(err);
+            });
+        });
       });
     });
 
@@ -50,7 +73,6 @@ describe('/users', function () {
         req
           .expect(function (res) {
             expect(res.body.errors).to.be.an('object');
-            console.log(res.body.errors)
             expect(res.body.errors).to.have.property('email');
           })
           .end(done);
