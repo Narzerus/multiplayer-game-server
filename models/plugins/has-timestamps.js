@@ -3,7 +3,7 @@
 module.exports = function (schema) {
   schema.add({
     created_at: Date,
-    updated_at: Date
+    updated_at: Date,
   });
 
   schema.pre('save', function (next) {

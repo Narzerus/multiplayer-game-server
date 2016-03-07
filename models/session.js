@@ -16,7 +16,8 @@ let sessionSchema = new Schema({
     index: {
       unique: true
     }
-  }
+  },
+  user_id: mongoose.Schema.Types.ObjectId
 });
 
 /**
