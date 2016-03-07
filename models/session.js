@@ -17,7 +17,7 @@ let sessionSchema = new Schema({
       unique: true
     }
   },
-  user_id: mongoose.Schema.Types.ObjectId
+  _user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 });
 
 /**
