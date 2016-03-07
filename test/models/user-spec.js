@@ -3,7 +3,6 @@
 require('../spec-helper');
 
 let _ = require('lodash');
-let db = require('../../db');
 let chai = require('chai');
 let chaiAsPromised = require('chai-as-promised');
 
@@ -40,7 +39,7 @@ describe('User', function () {
       done();
     });
 
-    it('sets created_at on update', function (done) {
+    it('changes updated_at on update', function (done) {
       let prevDate = user.updated_at;
       expect(user.updated_at).to.eql(user.created_at);
       user.password = 'new-password';

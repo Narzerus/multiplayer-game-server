@@ -6,6 +6,8 @@ let bcrypt = require('bcrypt');
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
+let hasTimestamps = require('./plugins/has-timestamps');
+
 /**
 * Schema
 **/
@@ -20,27 +22,12 @@ let userSchema = new Schema({
   password: {
     type: String,
     required: true
-  },
-  created_at: Date,
-  updated_at: Date
+  }
 });
 
 /**
 * Middleware
 **/
-/* Set timestamps */
-userSchema.pre('save', function (next) {
-  let currentDate;
-
-  currentDate = new Date();
-  this.updated_at = currentDate;
-
-  if (!this.created_at) {
-    this.created_at = currentDate;
-  }
-
-  next();
-});
 /* Hash paswords */
 userSchema.pre('save', function (next) {
   if (!this.isModified('password')) { return next(); }
@@ -99,6 +86,11 @@ userSchema.methods.comparePassword = function (password) {
     });
   });
 };
+
+/**
+* Plugins
+*/
+userSchema.plugin(hasTimestamps);
 
 
 module.exports = mongoose.model('User', userSchema);
