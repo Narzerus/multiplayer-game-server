@@ -48,6 +48,14 @@ describe('POST /sessions', function () {
       req.expect(200, done);
     });
 
+    it('returns a token', function (done) {
+      req
+        .expect(function (res) {
+          expect(res.body.session.token).to.be.a('string');
+        })
+        .end(done);
+    });
+
     it('creates a new session', function (done) {
       req.end(function () {
         Session.count({_user: user._id}, function (res) {
@@ -84,12 +92,27 @@ describe('POST /sessions', function () {
   });
 
   describe('INVALID PARAMS', function () {
-    it('responds with status 422', function () {
+    let req;
 
+    beforeEach(function () {
+      req = request(app)
+        .post('/sessions')
+        .send({
+          login: {
+            email: 'sessions@controller.com',
+            password: 'badpassword'
+          }
+        });
+    });
+    it('responds with status 422', function (done) {
+      req.expect(200, done);
     });
 
     it('responds with error', function () {
-
+      req.expect(function (res) {
+        expect(res.body.errors).to.be.an('object');
+        expect(res.body.errors).to.have.property('password');
+      });
     });
   });
 });
